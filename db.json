@@ -1,0 +1,380 @@
+{
+    "schools": [
+      {
+        "id": "580e",
+        "schoolInfo": {
+          "name": "Maalimin Secondary School",
+          "email": "omar@gmail.com",
+          "phone": "0778375325",
+          "address": "Maalimin",
+          "county": "Garissa",
+          "postalCode": "56 - 70100"
+        },
+        "classSystem": "Form",
+        "classRange": {
+          "start": "1",
+          "end": "4"
+        },
+        "classes": [
+          {
+            "name": "Form 1",
+            "streams": [
+              "A",
+              "B"
+            ]
+          },
+          {
+            "name": "Form 2",
+            "streams": [
+              "A",
+              "B"
+            ]
+          },
+          {
+            "name": "Form 3",
+            "streams": [
+              "A",
+              "B"
+            ]
+          },
+          {
+            "name": "Form 4",
+            "streams": [
+              "A",
+              "B"
+            ]
+          }
+        ],
+        "students": [
+          {
+            "id": 1,
+            "photo": "https://kpopping.com/documents/81/4/social-widget/Jo-facePicture(7).webp?v=de2b5",
+            "admNo": "678",
+            "name": "Abukar Bashow",
+            "gender": "Female",
+            "class": "Form 2",
+            "stream": "B",
+            "doj": "2024-10-08",
+            "dob": "2024-10-16",
+            "address": "BUJuh",
+            "fingerprint": null,
+            "parentIds": [
+              1, 2
+            ]
+          },
+          {
+            "id": 2,
+            "photo": {},
+            "admNo": "198",
+            "name": "Suleiman Mahad",
+            "gender": "Male",
+            "class": "Form 2",
+            "stream": "B",
+            "doj": "2024-10-10",
+            "dob": "2024-10-25",
+            "address": "Hagar",
+            "fingerprint": null,
+            "parentIds": [
+              1
+            ]
+          },
+          {
+            "id": 3,
+            "photo": {},
+            "admNo": "180",
+            "name": "Ahmed Mahad",
+            "gender": "Male",
+            "class": "Form 2",
+            "stream": "B",
+            "doj": "2024-10-10",
+            "dob": "2024-10-25",
+            "address": "Hagar",
+            "fingerprint": null,
+            "parentIds": [
+              1
+            ]
+          }
+        ],
+        "teachers": [
+          {
+            "id": 1,
+            "idNo": "345678",
+            "name": "Hassan Khalif",
+            "email": "omarmahat702@gmail.com",
+            "phone": "0725375325",
+            "photo": null,
+            "gender": "Male",
+            "doj": "2024-10-15",
+            "dob": "2024-10-22",
+            "address": "Garissa",
+            "tscNumber": "TSC456789",
+            "fingerprint": null
+          }
+        ],
+        "parents": [
+          {
+            "idNo": "345678",
+            "name": "Fatuma Bashow",
+            "phone": "0725375325",
+            "email": "antonymwangikr@gmail.com",
+            "gender": "Male",
+            "relationship": "Mother",
+            "id": 1
+          },
+          {
+            "idNo": "345678",
+            "name": "Fatuma Bashow",
+            "phone": "0725375325",
+            "email": "antonymwangikr@gmail.com",
+            "gender": "Male",
+            "relationship": "Mother",
+            "id": 2
+          }
+        ],
+        "schedule": {
+          "weekdays": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "weekends": [
+            "Saturday",
+            "Sunday"
+          ],
+          "dailySessions": {
+            "Monday": [
+              {
+                "name": "Morning",
+                "startTime": "08:00",
+                "endTime": "12:00"
+              },
+              {
+                "name": "Afternoon",
+                "startTime": "14:00",
+                "endTime": "16:00"
+              }
+            ],
+            "Tuesday": [
+              {
+                "name": "Morning",
+                "startTime": "08:00",
+                "endTime": "12:00"
+              },
+              {
+                "name": "Afternoon",
+                "startTime": "14:00",
+                "endTime": "16:00"
+              }
+            ],
+            "Wednesday": [
+              {
+                "name": "Morning",
+                "startTime": "08:00",
+                "endTime": "12:00"
+              },
+              {
+                "name": "Afternoon",
+                "startTime": "14:00",
+                "endTime": "16:00"
+              }
+            ],
+            "Thursday": [
+              {
+                "name": "Morning",
+                "startTime": "08:00",
+                "endTime": "12:00"
+              },
+              {
+                "name": "Afternoon",
+                "startTime": "14:00",
+                "endTime": "16:00"
+              }
+            ],
+            "Friday": [
+              {
+                "name": "Morning",
+                "startTime": "08:00",
+                "endTime": "12:00"
+              },
+              {
+                "name": "Afternoon",
+                "startTime": "14:00",
+                "endTime": "16:00"
+              }
+            ],
+            "Saturday": [
+              {
+                "name": "Morning",
+                "startTime": "09:00",
+                "endTime": "12:00"
+              }
+            ],
+            "Sunday": []
+          },
+          "holidays": [
+            {
+              "name": "Mashujaa Day",
+              "startDate": "2024-10-20",
+              "endDate": "2024-10-20",
+              "repeatType": "yearly"
+            }
+          ]
+        },
+        "attendances": {
+          "students": [
+            {
+              "date": "2024-10-15",
+              "records": [
+                {
+                  "studentId": 2,
+                  "status": "absent",
+                  "time": "14:38",
+                  "method": "manual"
+                },
+                {
+                  "studentId": 1,
+                  "status": "present",
+                  "time": "14:38",
+                  "method": "manual"
+                },
+                {
+                  "studentId": 3,
+                  "status": "late",
+                  "time": "14:38",
+                  "method": "manual"
+                }
+              ]
+            },
+            {
+              "date": "2024-12-15",
+              "records": [
+                {
+                  "studentId": 2,
+                  "status": "present",
+                  "time": "14:38",
+                  "method": "manual"
+                },
+                {
+                  "studentId": 1,
+                  "status": "present",
+                  "time": "14:38",
+                  "method": "manual"
+                },
+                {
+                  "studentId": 3,
+                  "status": "absent",
+                  "time": "14:38",
+                  "method": "manual"
+                }
+              ]
+            },
+            {
+              "date": "2024-10-22",
+              "records": [
+                {
+                  "studentId": 1,
+                  "status": "present",
+                  "time": "16:37",
+                  "method": "manual"
+                },
+                {
+                  "studentId": 2,
+                  "status": "present",
+                  "time": "16:37",
+                  "method": "manual"
+                },
+                {
+                  "studentId": 3,
+                  "status": "present",
+                  "time": "16:37",
+                  "method": "manual"
+                }
+              ]
+            },
+            {
+              "date": "2024-10-24",
+              "records": [
+                {
+                  "studentId": 1,
+                  "status": "absent",
+                  "time": "17:04",
+                  "method": "manual"
+                },
+                {
+                  "studentId": 2,
+                  "status": "present",
+                  "time": "17:04",
+                  "method": "manual"
+                },
+                {
+                  "studentId": 3,
+                  "status": "late",
+                  "time": "17:04",
+                  "method": "manual"
+                }
+              ]
+            }
+          ],
+          "teachers": [
+            {
+              "date": "2024-10-15",
+              "records": [
+                {
+                  "teacherId": 1,
+                  "status": "absent",
+                  "time": "14:38",
+                  "method": "manual"
+                }
+              ]
+            },
+            {
+              "date": "2024-10-21",
+              "records": [
+                {
+                  "teacherId": 1,
+                  "status": "late",
+                  "time": "12:21",
+                  "method": "fingerprint"
+                }
+              ]
+            },
+            {
+              "date": "2024-10-18",
+              "records": [
+                {
+                  "teacherId": 1,
+                  "status": "present",
+                  "time": "16:38",
+                  "method": "manual"
+                }
+              ]
+            },
+            {
+              "date": "2024-10-03",
+              "records": [
+                {
+                  "teacherId": 1,
+                  "status": "absent",
+                  "time": "16:39",
+                  "method": "manual"
+                }
+              ]
+            },
+            {
+              "date": "2024-10-24",
+              "records": [
+                {
+                  "teacherId": 1,
+                  "status": "present",
+                  "time": "17:05",
+                  "method": "manual"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
