@@ -1,74 +1,80 @@
-// api/server.js
-const jsonServer = require('json-server');
+// api/index.js
+import jsonServer from 'json-server';
+import { createServer } from 'http';
+import { parse } from 'url';
+
+// Create JSON Server instance
 const server = jsonServer.create();
 const router = jsonServer.router('db.json');
 const middlewares = jsonServer.defaults();
 
-// Set default middlewares
+// Configure middleware
 server.use(middlewares);
-
-// Handle POST, PUT, and PATCH
 server.use(jsonServer.bodyParser);
 
-// Custom middleware for CORS and logging
+// CORS middleware
 server.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', '*');
   res.header('Access-Control-Allow-Methods', '*');
-
+  
   if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
+    return res.status(200).end();
   }
-
-  console.log('Request:', req.method, req.url);
+  
   next();
 });
 
-// Custom routes for your school data
-server.get('/schools/:schoolId/students', (req, res) => {
+// Custom routes
+const handleSchoolRoute = (req, res, type) => {
   const db = router.db;
-  const schoolId = req.params.schoolId;
+  const { schoolId } = req.query;
+  
+  if (!schoolId) {
+    return res.status(400).json({ error: "School ID is required" });
+  }
+  
   const school = db.get('schools').find({ id: schoolId }).value();
-
+  
   if (school) {
-    res.json(school.students);
+    res.json(school[type]);
   } else {
     res.status(404).json({ error: "School not found" });
   }
-});
+};
 
-server.get('/schools/:schoolId/teachers', (req, res) => {
-  const db = router.db;
-  const schoolId = req.params.schoolId;
-  const school = db.get('schools').find({ id: schoolId }).value();
+// API handler for Vercel
+const handler = (req, res) => {
+  const parsedUrl = parse(req.url, true);
+  const { pathname } = parsedUrl;
 
-  if (school) {
-    res.json(school.teachers);
-  } else {
-    res.status(404).json({ error: "School not found" });
+  // Set appropriate headers
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST,PUT,DELETE');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
   }
-});
 
-server.get('/schools/:schoolId/attendances', (req, res) => {
-  const db = router.db;
-  const schoolId = req.params.schoolId;
-  const school = db.get('schools').find({ id: schoolId }).value();
-
-  if (school) {
-    res.json(school.attendances);
-  } else {
-    res.status(404).json({ error: "School not found" });
+  // Route handling
+  if (pathname.startsWith('/api/schools/')) {
+    if (pathname.includes('/students')) {
+      return handleSchoolRoute(req, res, 'students');
+    } else if (pathname.includes('/teachers')) {
+      return handleSchoolRoute(req, res, 'teachers');
+    } else if (pathname.includes('/attendances')) {
+      return handleSchoolRoute(req, res, 'attendances');
+    }
   }
-});
 
-// Use default router
-server.use(router);
+  // Default json-server router
+  return router(req, res);
+};
 
-// Error handling
-server.use((err, req, res, next) => {
-  console.error('Error:', err.message);
-  res.status(500).json({ error: 'Internal Server Error' });
-});
-
-// Export as a Vercel serverless function
-module.exports = server;
+export default handler;
