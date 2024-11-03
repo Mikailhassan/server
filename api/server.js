@@ -5,42 +5,18 @@ const path = require('path');
 // Create express server
 const server = jsonServer.create();
 
-// Create a static database object instead of reading from file
-const db = {
-  "schools": [
-    {
-      "id": "1",
-      "name": "Sample School",
-      "students": [
-        {
-          "id": "1",
-          "name": "John Doe",
-          "grade": "10"
-        }
-      ],
-      "teachers": [
-        {
-          "id": "1",
-          "name": "Jane Smith",
-          "subject": "Mathematics"
-        }
-      ],
-      "attendances": [
-        {
-          "id": "1",
-          "date": "2024-03-01",
-          "present": true
-        }
-      ]
-    }
-  ]
-};
+// Resolve path to db.json
+const dbPath = path.resolve(process.cwd(), 'db.json');
 
-// Create router using the static database
-const router = jsonServer.router(db);
-const middlewares = jsonServer.defaults();
+// Create router using the json file
+const router = jsonServer.router(dbPath);
+const middlewares = jsonServer.defaults({
+  readOnly: false,
+  noCors: true, // We'll handle CORS in vercel.json
+  bodyParser: true
+});
 
-// Set default middlewares (logger, static, cors and no-cache)
+// Set default middlewares
 server.use(middlewares);
 
 // Handle POST, PUT and PATCH
@@ -48,8 +24,9 @@ server.use(jsonServer.bodyParser);
 
 // Custom routes for school data
 server.get('/schools/:schoolId/students', (req, res) => {
+  const db = router.db; // Access the lowdb instance
   const schoolId = req.params.schoolId;
-  const school = db.schools.find(s => s.id === schoolId);
+  const school = db.get('schools').find({ id: schoolId }).value();
   
   if (school) {
     res.json(school.students);
@@ -59,8 +36,9 @@ server.get('/schools/:schoolId/students', (req, res) => {
 });
 
 server.get('/schools/:schoolId/teachers', (req, res) => {
+  const db = router.db;
   const schoolId = req.params.schoolId;
-  const school = db.schools.find(s => s.id === schoolId);
+  const school = db.get('schools').find({ id: schoolId }).value();
   
   if (school) {
     res.json(school.teachers);
@@ -70,8 +48,9 @@ server.get('/schools/:schoolId/teachers', (req, res) => {
 });
 
 server.get('/schools/:schoolId/attendances', (req, res) => {
+  const db = router.db;
   const schoolId = req.params.schoolId;
-  const school = db.schools.find(s => s.id === schoolId);
+  const school = db.get('schools').find({ id: schoolId }).value();
   
   if (school) {
     res.json(school.attendances);
@@ -80,14 +59,13 @@ server.get('/schools/:schoolId/attendances', (req, res) => {
   }
 });
 
-// Add custom routes before json-server router
+// Add generic routes
 server.use(router);
 
 // Error handling middleware
 server.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ error: 'Internal Server Error' });
+  res.status(500).json({ error: 'Internal Server Error', details: err.message });
 });
 
-// For Vercel, we need to export the configured server
 module.exports = server;
