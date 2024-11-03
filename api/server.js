@@ -1,80 +1,93 @@
-// api/index.js
-import jsonServer from 'json-server';
-import { createServer } from 'http';
-import { parse } from 'url';
+// api/server.js
+const jsonServer = require('json-server');
+const path = require('path');
 
-// Create JSON Server instance
+// Create express server
 const server = jsonServer.create();
-const router = jsonServer.router('db.json');
+
+// Create a static database object instead of reading from file
+const db = {
+  "schools": [
+    {
+      "id": "1",
+      "name": "Sample School",
+      "students": [
+        {
+          "id": "1",
+          "name": "John Doe",
+          "grade": "10"
+        }
+      ],
+      "teachers": [
+        {
+          "id": "1",
+          "name": "Jane Smith",
+          "subject": "Mathematics"
+        }
+      ],
+      "attendances": [
+        {
+          "id": "1",
+          "date": "2024-03-01",
+          "present": true
+        }
+      ]
+    }
+  ]
+};
+
+// Create router using the static database
+const router = jsonServer.router(db);
 const middlewares = jsonServer.defaults();
 
-// Configure middleware
+// Set default middlewares (logger, static, cors and no-cache)
 server.use(middlewares);
+
+// Handle POST, PUT and PATCH
 server.use(jsonServer.bodyParser);
 
-// CORS middleware
-server.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', '*');
-  res.header('Access-Control-Allow-Methods', '*');
-  
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-  
-  next();
-});
-
-// Custom routes
-const handleSchoolRoute = (req, res, type) => {
-  const db = router.db;
-  const { schoolId } = req.query;
-  
-  if (!schoolId) {
-    return res.status(400).json({ error: "School ID is required" });
-  }
-  
-  const school = db.get('schools').find({ id: schoolId }).value();
+// Custom routes for school data
+server.get('/schools/:schoolId/students', (req, res) => {
+  const schoolId = req.params.schoolId;
+  const school = db.schools.find(s => s.id === schoolId);
   
   if (school) {
-    res.json(school[type]);
+    res.json(school.students);
   } else {
     res.status(404).json({ error: "School not found" });
   }
-};
+});
 
-// API handler for Vercel
-const handler = (req, res) => {
-  const parsedUrl = parse(req.url, true);
-  const { pathname } = parsedUrl;
-
-  // Set appropriate headers
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST,PUT,DELETE');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  );
-
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
+server.get('/schools/:schoolId/teachers', (req, res) => {
+  const schoolId = req.params.schoolId;
+  const school = db.schools.find(s => s.id === schoolId);
+  
+  if (school) {
+    res.json(school.teachers);
+  } else {
+    res.status(404).json({ error: "School not found" });
   }
+});
 
-  // Route handling
-  if (pathname.startsWith('/api/schools/')) {
-    if (pathname.includes('/students')) {
-      return handleSchoolRoute(req, res, 'students');
-    } else if (pathname.includes('/teachers')) {
-      return handleSchoolRoute(req, res, 'teachers');
-    } else if (pathname.includes('/attendances')) {
-      return handleSchoolRoute(req, res, 'attendances');
-    }
+server.get('/schools/:schoolId/attendances', (req, res) => {
+  const schoolId = req.params.schoolId;
+  const school = db.schools.find(s => s.id === schoolId);
+  
+  if (school) {
+    res.json(school.attendances);
+  } else {
+    res.status(404).json({ error: "School not found" });
   }
+});
 
-  // Default json-server router
-  return router(req, res);
-};
+// Add custom routes before json-server router
+server.use(router);
 
-export default handler;
+// Error handling middleware
+server.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Internal Server Error' });
+});
+
+// For Vercel, we need to export the configured server
+module.exports = server;
